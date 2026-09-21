@@ -10,10 +10,10 @@ BASE_DIR = Path(__file__).resolve().parent
 app = FastAPI()
 
 # 挂载静态资源：浏览器访问 /static/xxx
-app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
+app.mount("/static", StaticFiles(directory=BASE_DIR / "dist/static"), name="static")
 
 # 配置模板目录
-templates = Jinja2Templates(directory=BASE_DIR / "templates")
+templates = Jinja2Templates(directory=BASE_DIR / "dist/templates")
 
 
 @app.get("/")
@@ -44,3 +44,9 @@ async def hello(request: Request):
         request=request,
         name="上架月份分布图.html",
     )
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run("main:app", host="0.0.0.0", reload=True)

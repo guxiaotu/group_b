@@ -1,0 +1,22 @@
+services:
+
+  django:
+    image: docker.1ms.run/guxiaotu/x
+    restart: always
+    ports:
+      - "8000:8000/tcp"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: docker.1ms.run/mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Django123456
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - "3306:3306/tcp"
+
+volumes:
+  mysql:

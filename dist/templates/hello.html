@@ -20,7 +20,8 @@
         const option = {
             title: {
                 text: '月度销售与利润',
-                left: 'center'
+                left: 'center',
+                top: 0
             },
             tooltip: {
                 trigger: 'axis',
@@ -63,14 +64,14 @@
                 {
                     name: '销售额',
                     type: 'bar',
-                    data: {{ sales | tojson }},
+                    data: {{ sales | tojson | safe }},
                     barWidth: '30%',
                     itemStyle: { color: '#5470c6', borderRadius: [4, 4, 0, 0] }
                 },
                 {
                     name: '利润',
                     type: 'bar',
-                    data: {{ profit | tojson}},
+                    data: {{ profit | tojson | safe }},
                     barWidth: '30%',
                     itemStyle: { color: '#91cc75', borderRadius: [4, 4, 0, 0] }
                 },
@@ -78,7 +79,7 @@
                     name: '利润率',
                     type: 'line',
                     yAxisIndex: 1,
-                    data: {{ rate | tojson }},
+                    data: {{ rate | tojson | safe }},
                     smooth: true,
                     lineStyle: { width: 3, color: '#ee6666' },
                     itemStyle: { color: '#ee6666' }
