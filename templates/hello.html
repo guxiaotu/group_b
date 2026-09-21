@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>ECharts Demo</title>
+    <!-- 引入 ECharts CDN -->
+    <script src="/static/js/echarts.min.js"></script>
+    <style>
+        body { margin: 40px; font-family: Arial, sans-serif; }
+    </style>
+</head>
+<body>
+    <h2>📊 销售 & 利润看板</h2>
+    <div id="chart" style="width: 900px; height: 500px;"></div>
+
+    <script>
+        // 初始化图表
+        const chart = echarts.init(document.getElementById('chart'));
+
+        const option = {
+            title: {
+                text: '月度销售与利润',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'cross' }
+            },
+            legend: {
+                data: ['销售额', '利润', '利润率'],
+                top: 30
+            },
+            grid: {
+                left: '5%',
+                right: '5%',
+                bottom: '10%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                axisTick: { alignWithLabel: true }
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '金额（万）',
+                    min: 0,
+                    max: 200,
+                    interval: 50,
+                    axisLabel: { formatter: '{value} 万' }
+                },
+                {
+                    type: 'value',
+                    name: '利润率（%）',
+                    min: 0,
+                    max: 50,
+                    interval: 10,
+                    axisLabel: { formatter: '{value} %' }
+                }
+            ],
+            series: [
+                {
+                    name: '销售额',
+                    type: 'bar',
+                    data: {{ sales | tojson }},
+                    barWidth: '30%',
+                    itemStyle: { color: '#5470c6', borderRadius: [4, 4, 0, 0] }
+                },
+                {
+                    name: '利润',
+                    type: 'bar',
+                    data: {{ profit | tojson}},
+                    barWidth: '30%',
+                    itemStyle: { color: '#91cc75', borderRadius: [4, 4, 0, 0] }
+                },
+                {
+                    name: '利润率',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: {{ rate | tojson }},
+                    smooth: true,
+                    lineStyle: { width: 3, color: '#ee6666' },
+                    itemStyle: { color: '#ee6666' }
+                }
+            ]
+        };
+
+        chart.setOption(option);
+
+        // 窗口缩放自适应
+        window.addEventListener('resize', () => chart.resize());
+    </script>
+</body>
+</html>
