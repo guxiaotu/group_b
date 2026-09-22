@@ -3,7 +3,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from starlette.staticfiles import StaticFiles
 
-from app.api.routers import router as api_router
+from app.api.v1.routers import router as api_router
 
 app = FastAPI(title="ECharts Dashboard")
 
