@@ -36,10 +36,10 @@
 
 <script>
     // ---- 数据（后端注入） ----
-    const months = {{ months | tojson | safe }};
-    const counts = {{ counts | tojson | safe }};
-    const ratios = {{ ratios | tojson | safe }};
-    const sample_count = {{ sample_count | tojson | safe }};
+    const months = {{ x.months | tojson | safe }};
+    const counts = {{ x.counts | tojson | safe }};
+    const ratios = {{ x.ratios | tojson | safe }};
+    const sample_count = {{ x.sample_count | tojson | safe }};
 
     // ---- 组合图：柱状=当月数量 + 折线=累计 ----
     const chart = echarts.init(document.getElementById('combo-chart'));

@@ -13,15 +13,10 @@ async def hello(
     request: Request,
     templates: Jinja2Templates = Depends(dependency=get_template),
 ):
-    months, counts, ratios, sample_count= get_data()
-
     return templates.TemplateResponse(
         request=request,
         name="x.jinjia2",
         context={
-            "months": months,
-            "counts": counts,
-            "ratios": ratios,
-            "sample_count": sample_count,
+            "x": get_data().model_dump()
         },
     )
