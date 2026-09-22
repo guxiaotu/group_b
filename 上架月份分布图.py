@@ -4,6 +4,7 @@
 安装：python -m pip install -r requirements.txt
 运行：python 上架月份分布图.py "苹果手机壳行业数据.xlsx"
 """
+
 import argparse
 import json
 from pathlib import Path
@@ -15,7 +16,9 @@ TITLE = "上架月份分布图"
 
 
 def numeric(series):
-    return pd.to_numeric(series.astype(str).str.replace(r"[,，$￥¥\s]", "", regex=True), errors="coerce").replace([np.inf, -np.inf], np.nan)
+    return pd.to_numeric(
+        series.astype(str).str.replace(r"[,，$￥¥\s]", "", regex=True), errors="coerce"
+    ).replace([np.inf, -np.inf], np.nan)
 
 
 def require(df, columns):
@@ -35,7 +38,9 @@ def launch_data(path):
     df["上架时间"] = pd.to_datetime(df["上架时间"], errors="coerce")
     conflict = df.groupby("ASIN")["上架时间"].nunique(dropna=False).gt(1)
     if conflict.any():
-        raise ValueError(f"同一 ASIN 的上架时间冲突：{conflict[conflict].index.tolist()}")
+        raise ValueError(
+            f"同一 ASIN 的上架时间冲突：{conflict[conflict].index.tolist()}"
+        )
     df = df.drop_duplicates("ASIN").copy()
     total = len(df)
     missing = int(df["上架时间"].isna().sum())
@@ -45,14 +50,24 @@ def launch_data(path):
     periods = valid["上架时间"].dt.to_period("M")
     full_range = pd.period_range(periods.min(), periods.max(), freq="M")
     counts = periods.value_counts().reindex(full_range, fill_value=0).sort_index()
-    result = pd.DataFrame({"月份": counts.index.astype(str), "商品数量": counts.to_numpy()})
+    result = pd.DataFrame(
+        {"月份": counts.index.astype(str), "商品数量": counts.to_numpy()}
+    )
     result["样本占比(%)"] = result["商品数量"] / len(valid) * 100
     result["样本累计数量"] = result["商品数量"].cumsum()
     assert result["商品数量"].sum() == len(valid)
     assert np.isclose(result["样本占比(%)"].sum(), 100)
-    meta = {"source": Path(path).name, "sheet": "US", "raw": raw_count,
-            "count": total, "duplicates": raw_count - total, "missing": missing,
-            "valid": len(valid), "first": str(periods.min()), "last": str(periods.max())}
+    meta = {
+        "source": Path(path).name,
+        "sheet": "US",
+        "raw": raw_count,
+        "count": total,
+        "duplicates": raw_count - total,
+        "missing": missing,
+        "valid": len(valid),
+        "first": str(periods.min()),
+        "last": str(periods.max()),
+    }
     return result, meta
 
 
@@ -81,9 +96,13 @@ def brand_data(path):
         assert np.isclose(ranked[prefix + "占比(%)"].sum(), 100)
         assert np.isclose(ranked[prefix + "累计占比(%)"].iloc[-1], 100)
     result = result.sort_values("销量排名")
-    return result, {"source": Path(path).name, "sheet": "Brands", "count": len(result),
-                    "sales_total": float(result["月销量"].sum()),
-                    "revenue_total": float(result["月销售额($)"].sum())}
+    return result, {
+        "source": Path(path).name,
+        "sheet": "Brands",
+        "count": len(result),
+        "sales_total": float(result["月销量"].sum()),
+        "revenue_total": float(result["月销售额($)"].sum()),
+    }
 
 
 PAGE = r"""<!DOCTYPE html><html lang="zh-CN"><head>
@@ -189,7 +208,9 @@ def main():
     data, meta = launch_data(args.excel) if KIND == "launch" else brand_data(args.excel)
     library = args.echarts or Path(__file__).with_name("echarts.min.js")
     if not library.is_file():
-        raise FileNotFoundError("未找到 echarts.min.js；请完整解压实现包，或用 --echarts 指定本地库。")
+        raise FileNotFoundError(
+            "未找到 echarts.min.js；请完整解压实现包，或用 --echarts 指定本地库。"
+        )
     lib_text = library.read_text(encoding="utf-8").replace("</script", r"<\/script")
     if KIND == "launch":
         controls = '<label for="period">时间粒度</label><select id="period"><option value="month">按月</option><option value="quarter">按季度</option><option value="year">按年</option></select><label for="range">初始范围</label><select id="range"><option value="recent">最近时段（24月 / 8季 / 2年）</option><option value="all">全部时段</option></select>'
@@ -197,14 +218,28 @@ def main():
     else:
         controls = '<label for="metric">分析指标</label><select id="metric"><option value="月销量">月销量</option><option value="月销售额($)">月销售额</option></select><label for="top">展示品牌</label><select id="top"><option value="10">Top 10</option><option value="20">Top 20</option><option value="all">全部品牌</option></select>'
         chart_code = BRAND_JS
-    page = PAGE.replace("__PAGE_TITLE__", TITLE).replace("__LIBRARY__", '<script>' + lib_text + '</script>')
+    page = PAGE.replace("__PAGE_TITLE__", TITLE).replace(
+        "__LIBRARY__", "<script>" + lib_text + "</script>"
+    )
     page = page.replace("__CONTROLS__", controls).replace("__CHART_CODE__", chart_code)
-    page = page.replace("__DATA__", data.to_json(orient="records", force_ascii=False, double_precision=12).replace("</", "<\\/"))
-    page = page.replace("__META__", json.dumps(meta, ensure_ascii=False).replace("</", "<\\/"))
+    page = page.replace(
+        "__DATA__",
+        data.to_json(orient="records", force_ascii=False, double_precision=12).replace(
+            "</", "<\\/"
+        ),
+    )
+    page = page.replace(
+        "__META__", json.dumps(meta, ensure_ascii=False).replace("</", "<\\/")
+    )
     output = Path(args.out).resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(page, encoding="utf-8")
-    data.to_csv(output.with_name(output.stem + "_分析数据.csv"), index=False, encoding="utf-8-sig", float_format="%.8f")
+    data.to_csv(
+        output.with_name(output.stem + "_分析数据.csv"),
+        index=False,
+        encoding="utf-8-sig",
+        float_format="%.8f",
+    )
     print(json.dumps(meta, ensure_ascii=False, indent=2))
     print(f"已生成：{output}")
 
