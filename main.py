@@ -15,9 +15,11 @@ app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 # 注册路由
 app.include_router(api_router, prefix="/api/v1")
 
+
 @app.get("/")
 async def root(request: Request):
     return "Hello FastAPI"
+
 
 if __name__ == "__main__":
     import uvicorn
