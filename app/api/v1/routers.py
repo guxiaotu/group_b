@@ -17,6 +17,6 @@ async def hello(
         request=request,
         name="x.jinjia2",
         context={
-            "x": get_data().model_dump()
+            "x": get_data()
         },
     )
