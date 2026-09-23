@@ -16,7 +16,5 @@ async def hello(
     return templates.TemplateResponse(
         request=request,
         name="x.jinjia2",
-        context={
-            "x": get_data()
-        },
+        context={"x": get_data()},
     )

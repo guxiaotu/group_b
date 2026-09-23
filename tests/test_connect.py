@@ -1,6 +1,6 @@
-from sqlmodel import text
+from sqlalchemy import text
 
-from app.config.database import engine
+from app.config.database import engine, create_tables, drop_tables
 
 
 def test_connection():
@@ -14,3 +14,11 @@ def test_connection():
     except Exception as e:
         print("❌ 数据库连接失败！")
         print(f"错误: {e}")
+
+
+def test_create_table():
+    create_tables()
+
+
+def test_drop_table():
+    drop_tables()
