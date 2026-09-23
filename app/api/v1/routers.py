@@ -2,8 +2,8 @@ from fastapi import Request, APIRouter, Depends
 from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
-from app.api.views import x_view
 from app.core.templates import get_template
+from app.views import x_view
 
 router = APIRouter()
 

@@ -1,6 +1,5 @@
-from datetime import date, datetime
+from datetime import date
 
-from pydantic import field_serializer
 from sqlmodel import SQLModel, Field
 
 
@@ -11,8 +10,3 @@ class X(SQLModel, table=True):
     count: int
     ratios: float
     sample_count: int
-
-    @field_serializer("month")
-    def serialize_sample_count(self, v: datetime) -> str:
-        """ 需要序列化字符串后才能传输给前端"""
-        return v.strftime("%Y-%m")

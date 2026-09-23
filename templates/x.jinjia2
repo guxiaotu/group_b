@@ -39,7 +39,7 @@
     const month = {{ x.month | tojson | safe }};
     const count = {{ x.count | tojson | safe }};
     const ratios = {{ x.ratios | tojson | safe }};
-    const sample_count = {{ sample_count | tojson | safe }};
+    const sample_count = {{ x.sample_count | tojson | safe }};
 
     // ---- 组合图：柱状=当月数量 + 折线=累计 ----
     const chart = echarts.init(document.getElementById('combo-chart'));
