@@ -1,18 +1,21 @@
-from fastapi import Request, APIRouter, Depends
+from pathlib import Path
+
+from fastapi import Request, APIRouter
 from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
-from app.core.templates import get_template
-from app.views import x_view
+from app.view import x_view
 
 router = APIRouter()
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
-@router.get("/x", response_class=HTMLResponse)
-async def hello(
-    request: Request,
-    templates: Jinja2Templates = Depends(dependency=get_template),
-):
+# 模板
+templates = Jinja2Templates(directory=BASE_DIR / "templates")
+
+
+@router.get("/query", response_class=HTMLResponse)
+async def history(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="x.jinjia2",

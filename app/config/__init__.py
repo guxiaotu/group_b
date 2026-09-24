@@ -1,3 +1,3 @@
-from app.model.entity.x import X
+from app.model.entity import X
 
 __all__ = ["X"]
