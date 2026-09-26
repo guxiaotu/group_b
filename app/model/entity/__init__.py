@@ -1,3 +1,1 @@
-from .models import X
-
-__all__ = ["X"]
+from .models import *
