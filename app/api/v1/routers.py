@@ -39,6 +39,10 @@ async def history(request: Request):
                 {"name": "江苏", "value": 5000},
                 {"name": "上海", "value": 3000},
                 {"name": "北京", "value": 2500},
+                {"name": "四川", "value": 1800},
+                {"name": "湖北", "value": 1200},
+                {"name": "福建", "value": 1000},
             ],
+            "fly_lines": []  # JS 里没直接用，留着扩展
         }
     )

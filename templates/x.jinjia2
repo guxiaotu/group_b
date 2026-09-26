@@ -1,64 +1,62 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8"/>
-    <title>{{ title }}</title>
-    <link rel="stylesheet" href="/static/css/screen.css"/>
-    <script src="/static/js/echarts.min.js"></script>
+  <meta charset="UTF-8" />
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="/static/css/screen.css" />
+  <script src="/static/js/echarts.min.js"></script>
 </head>
-
 <body>
-
-<!-- css样式 -->
-<div class="screen">
-    <!-- 顶部 -->
+  <div class="screen">
     <header class="screen-header">
-        <h1>{{ title }}</h1>
-        <div class="clock" id="clock"></div>
+      <h1>{{ title }}</h1>
+      <div class="clock" id="clock"></div>
     </header>
 
-    <!-- 数字卡片 -->
     <section class="top-cards">
-        <div class="card">
-            <div class="num" id="num-sales">{{ total_sales }}</div>
-            <div class="label">总销量</div>
-        </div>
-        <div class="card">
-            <div class="num" id="num-reviews">{{ total_reviews }}</div>
-            <div class="label">评论总数</div>
-        </div>
+      <div class="card">
+        <div class="num">{{ total_sales }}</div>
+        <div class="label">总销量</div>
+      </div>
+      <div class="card">
+        <div class="num">{{ total_reviews }}</div>
+        <div class="label">评论总数</div>
+      </div>
     </section>
 
-    <!-- 三栏 -->
     <main class="grid">
-        <div class="panel">
-            <div class="panel-title">品牌销量</div>
-            <div id="bar" class="chart"></div>
-        </div>
+      <div class="panel">
+        <div class="panel-title">品牌销量</div>
+        <div id="bar" class="chart"></div>
+      </div>
 
-        <div class="panel">
-            <div class="panel-title">价格区间占比</div>
-            <div id="pie" class="chart"></div>
-            <div class="panel-title mt">销量趋势</div>
-            <div id="line" class="chart"></div>
-        </div>
+      <div class="panel center">
+        <div class="panel-title">地区销量分布</div>
+        <div id="map" class="chart"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">价格区间占比</div>
+        <div id="pie" class="chart"></div>
+        <div class="panel-title mt">销量趋势</div>
+        <div id="line" class="chart"></div>
+      </div>
     </main>
-</div>
+  </div>
 
-<script>
-    // Jinja2 注入数据后端传输过来的model模型（安全 JSON）
+  <script>
     const DATA = {
-        brands: {{ brands | tojson }},
-        brand_sales: {{ brand_sales | tojson }},
-        month: {{ months | tojson }},
-        sales_trend: {{ sales_trend | tojson }},
-        price_dist: {{ price_dist | tojson }},
-        map_points: {{ map_points | tojson }}
+      brands: {{ brands | tojson }},
+      brand_sales: {{ brand_sales | tojson }},
+      months: {{ months | tojson }},
+      sales_trend: {{ sales_trend | tojson }},
+      price_dist: {{ price_dist | tojson }},
+      map_points: {{ map_points | tojson }},
+      // 飞线起点→终点坐标（后面用）
+      fly_lines: {{ fly_lines | tojson }}
     };
-</script>
+  </script>
 
-<!-- screen.js进行数据处理 -->
-<script src="/static/js/screen.js"></script>
-
+  <script src="/static/js/screen.js"></script>
 </body>
 </html>
