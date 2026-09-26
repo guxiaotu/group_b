@@ -1,3 +1,3 @@
-from .x import X
+from .models import X
 
 __all__ = ["X"]

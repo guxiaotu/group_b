@@ -1,6 +1,8 @@
 from sqlmodel import Session, SQLModel, create_engine
 
-DATABASE_URL = "postgresql+psycopg://Django123456:Django123456@localhost:5432/test"
+# DATABASE_URL = "postgresql+psycopg://Django123456:Django123456@localhost:5432/test"
+DATABASE_URL = "mysql+pymysql://root:Django123456@localhost:3306/test?charset=utf8mb4"
+
 
 engine = create_engine(
     DATABASE_URL,

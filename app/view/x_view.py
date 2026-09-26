@@ -3,14 +3,13 @@ from typing import List
 from sqlmodel import select
 
 from app.config.database import get_session
-from app.model.entity.x import X
+from app.model.entity import X
 from app.model.view import XView
 
 
 def find_entity() -> List[X]:
-    session = get_session()
-    with session as s:
-        return session.exec(select(X)).all()
+    with get_session() as s:
+        return s.exec(select(X)).all()
 
 
 def get_view() -> XView:
