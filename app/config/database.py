@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlmodel import SQLModel
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 # 加载 .env
 load_dotenv()
@@ -24,6 +25,7 @@ engine = create_async_engine(
 AsyncSessionLocal = async_sessionmaker(
     bind=engine,
     expire_on_commit=False,  # commit后不会自动过期（可以继续使用对象，比如访问对象属性）
+    class_=AsyncSession,  # 指定为SQLModel封装后的AsyncSession，而不是原生SQLAlchemy
 )
 
 
@@ -37,8 +39,6 @@ async def get_session():
         except Exception:
             await session.rollback()
             raise
-        finally:
-            await session.close()
 
 
 async def create_tables():

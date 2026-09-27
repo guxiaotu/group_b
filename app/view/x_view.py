@@ -1,14 +1,14 @@
 from typing import Sequence
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.model.entity import X
 from app.model.view import XView
 
 
 async def find_entity(s: AsyncSession) -> Sequence[X]:
-    return (await s.execute(select(X))).scalars().all()
+    return (await s.exec(select(X))).all()
 
 
 async def get_view(s: AsyncSession) -> XView:

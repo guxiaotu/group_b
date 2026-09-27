@@ -25,10 +25,8 @@ default = true
 
 [dependency-groups]
 dev = [
-    "jupyterlab>=4.6.3",
     "pytest>=9.1.1",
     "pytest-asyncio>=1.4.0",
-    "pytest-dag>=3.14.15",
     "ruff>=0.16.8",
     "sqlacodegen>=4.0.4",
 ]

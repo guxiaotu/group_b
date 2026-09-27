@@ -16,8 +16,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 
-@router.get("/query", response_class=HTMLResponse)
-async def history(request: Request, s: AsyncSession = Depends(get_session)):
+@router.get("/x", response_class=HTMLResponse)
+async def x(request: Request, s: AsyncSession = Depends(get_session)):
     x = await x_view.get_view(s)
     return templates.TemplateResponse(
         request=request, name="x.jinjia2", context={"x": x.model_dump()}
