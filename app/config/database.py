@@ -1,11 +1,16 @@
+import os
+
+from dotenv import load_dotenv
 from sqlmodel import Session, SQLModel, create_engine
 
-# DATABASE_URL = "postgresql+psycopg://Django123456:Django123456@localhost:5432/test"
-DATABASE_URL = "mysql+pymysql://root:Django123456@localhost:3306/test?charset=utf8mb4"
+# 加载 .env
+load_dotenv()
 
+# 只读取 DATABASE_URL
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(
-    DATABASE_URL,
+    url=str(DATABASE_URL),
     echo=True,  # 调试用
     pool_pre_ping=True,  # 防止断连
 )

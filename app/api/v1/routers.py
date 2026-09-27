@@ -4,6 +4,8 @@ from fastapi import Request, APIRouter
 from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
+from app.view import x_view
+
 router = APIRouter()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
@@ -15,8 +17,15 @@ templates = Jinja2Templates(directory=BASE_DIR / "templates")
 @router.get("/query", response_class=HTMLResponse)
 async def history(request: Request):
     return templates.TemplateResponse(
+        request=request, name="x.jinjia2", context={"x": x_view.get_view().model_dump()}
+    )
+
+
+@router.get("/test", response_class=HTMLResponse)
+async def history(request: Request):
+    return templates.TemplateResponse(
         request=request,
-        name="x.jinjia2",
+        name="test.jinjia2",
         # context={"x": x_view.get_view().model_dump()},
         context={
             "title": "手机壳行业分析大屏",
@@ -24,7 +33,14 @@ async def history(request: Request):
             "total_reviews": 104563,
             "brands": ["Spigen", "Caseology", "OtterBox", "UAG", "Apple", "Anker"],
             "brand_sales": [32000, 28000, 21000, 18000, 15000, 11811],
-            "months": ["2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09"],
+            "months": [
+                "2026-04",
+                "2026-05",
+                "2026-06",
+                "2026-07",
+                "2026-08",
+                "2026-09",
+            ],
             "sales_trend": [8000, 12000, 15000, 14000, 21000, 26000],
             "price_dist": [
                 {"value": 35, "name": "0-10"},
@@ -43,6 +59,6 @@ async def history(request: Request):
                 {"name": "湖北", "value": 1200},
                 {"name": "福建", "value": 1000},
             ],
-            "fly_lines": []  # JS 里没直接用，留着扩展
-        }
+            "fly_lines": [],  # JS 里没直接用，留着扩展
+        },
     )
