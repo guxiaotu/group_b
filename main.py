@@ -17,7 +17,7 @@ app.include_router(api_router, prefix="/api/v1")
 
 
 @app.get("/")
-async def root(request: Request):
+def root(request: Request):
     return "Hello FastAPI"
 
 

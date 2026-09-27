@@ -1,9 +1,12 @@
 from pathlib import Path
 
+from fastapi import Depends
 from fastapi import Request, APIRouter
 from fastapi.responses import HTMLResponse
+from sqlmodel import Session
 from starlette.templating import Jinja2Templates
 
+from app.config.database import get_session
 from app.view import x_view
 
 router = APIRouter()
@@ -14,15 +17,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 
-@router.get("/query", response_class=HTMLResponse)
-async def history(request: Request):
+@router.get("/x", response_class=HTMLResponse)
+def x(request: Request, s: Session = Depends(get_session)):
     return templates.TemplateResponse(
-        request=request, name="x.jinjia2", context={"x": x_view.get_view().model_dump()}
+        request=request,
+        name="x.jinjia2",
+        context={"x": x_view.get_view(s).model_dump()},
     )
 
 
 @router.get("/test", response_class=HTMLResponse)
-async def history(request: Request):
+def test(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="test.jinjia2",

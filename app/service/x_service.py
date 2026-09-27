@@ -4,7 +4,3 @@ from app.data_mining import data_mining
 
 def save_data():
     x_dao.save_data(data_mining.read_data())
-
-
-def test_save_data():
-    save_data()

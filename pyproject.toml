@@ -15,16 +15,12 @@ dependencies = [
     "sqlmodel>=0.0.42",
 ]
 
-[tool.fastapi]
-entrypoint = "main:app"
-
 [[tool.uv.index]]
 url = "https://mirrors.aliyun.com/pypi/simple/"
 default = true
 
 [dependency-groups]
 dev = [
-    "jupyterlab>=4.6.3",
     "pytest>=9.1.1",
     "ruff>=0.16.8",
     "sqlacodegen>=4.0.4",
@@ -35,3 +31,6 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_functions = ["test_*"]
 addopts = "-s"
+
+[tool.fastapi]
+entrypoint = "main:app"

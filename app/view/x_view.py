@@ -1,19 +1,17 @@
-from typing import List
+from typing import Sequence
 
-from sqlmodel import select
+from sqlmodel import select, Session
 
-from app.config.database import get_session
 from app.model.entity import X
 from app.model.view import XView
 
 
-def find_entity() -> List[X]:
-    with get_session() as s:
-        return s.exec(select(X)).all()
+def find_entity(s: Session) -> Sequence[X]:
+    return s.exec(select(X)).all()
 
 
-def get_view() -> XView:
-    x_list = find_entity()
+def get_view(s: Session) -> XView:
+    x_list = find_entity(s)
     return XView(
         month=[
             x.month.strftime("%Y-%m") for x in x_list
