@@ -1,9 +1,11 @@
 from pathlib import Path
 
-from fastapi import Request, APIRouter
+from fastapi import Request, APIRouter, Depends
 from fastapi.responses import HTMLResponse
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.templating import Jinja2Templates
 
+from app.config.database import get_session
 from app.view import x_view
 
 router = APIRouter()
@@ -15,14 +17,15 @@ templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 
 @router.get("/query", response_class=HTMLResponse)
-async def history(request: Request):
+async def history(request: Request, s: AsyncSession = Depends(get_session)):
+    x = await x_view.get_view(s)
     return templates.TemplateResponse(
-        request=request, name="x.jinjia2", context={"x": x_view.get_view().model_dump()}
+        request=request, name="x.jinjia2", context={"x": x.model_dump()}
     )
 
 
 @router.get("/test", response_class=HTMLResponse)
-async def history(request: Request):
+async def test(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="test.jinjia2",

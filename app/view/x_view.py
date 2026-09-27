@@ -1,19 +1,18 @@
-from typing import List
+from typing import Sequence
 
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from app.config.database import get_session
 from app.model.entity import X
 from app.model.view import XView
 
 
-def find_entity() -> List[X]:
-    with get_session() as s:
-        return s.exec(select(X)).all()
+async def find_entity(s: AsyncSession) -> Sequence[X]:
+    return (await s.execute(select(X))).scalars().all()
 
 
-def get_view() -> XView:
-    x_list = find_entity()
+async def get_view(s: AsyncSession) -> XView:
+    x_list = await find_entity(s)
     return XView(
         month=[
             x.month.strftime("%Y-%m") for x in x_list
