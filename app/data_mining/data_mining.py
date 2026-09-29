@@ -6,10 +6,10 @@ import pandas as pd
 from app.model.entity import X
 
 DATA_DIR = (
-        Path(__file__).resolve().parent.parent.parent
-        / "data"
-        / "csv"
-        / "上架月份分布图_分析数据.csv"
+    Path(__file__).resolve().parent.parent.parent
+    / "data"
+    / "csv"
+    / "上架月份分布图_分析数据.csv"
 )
 
 

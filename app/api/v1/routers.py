@@ -1,10 +1,11 @@
 from pathlib import Path
+from typing import Annotated
 
 from fastapi import Depends
 from fastapi import Request, APIRouter
 from fastapi.responses import HTMLResponse
 from sqlmodel import Session
-from starlette.templating import Jinja2Templates
+from starlette.templating import Jinja2Templates, _TemplateResponse
 
 from app.config.database import get_session
 from app.view import x_view
@@ -18,7 +19,7 @@ templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 
 @router.get("/x", response_class=HTMLResponse)
-def x(request: Request, s: Session = Depends(get_session)):
+def x(request: Request, s: Annotated[Session, Depends(get_session)]):
     return templates.TemplateResponse(
         request=request,
         name="x.jinjia2",
