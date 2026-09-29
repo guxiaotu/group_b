@@ -37,9 +37,10 @@ def get_session():
 
 
 def create_tables():
-    SQLModel.metadata.create_all(engine)
+    with engine.begin() as conn:
+        SQLModel.metadata.create_all(conn)
 
 
 def drop_tables():
-    SQLModel.metadata.drop_all(engine)
-    SQLModel.metadata.drop_all(engine)
+    with engine.begin() as conn:
+        SQLModel.metadata.drop_all(conn)
