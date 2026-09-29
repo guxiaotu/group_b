@@ -1,21 +1,20 @@
 import asyncio
 from datetime import datetime
 from pathlib import Path
-from typing import List
 
 import pandas as pd
 
 from app.model.entity import X
 
 DATA_DIR = (
-    Path(__file__).resolve().parent.parent.parent
-    / "data"
-    / "csv"
-    / "上架月份分布图_分析数据.csv"
+        Path(__file__).resolve().parent.parent.parent
+        / "data"
+        / "csv"
+        / "上架月份分布图_分析数据.csv"
 )
 
 
-async def read_data() -> List[X]:
+async def read_data() -> list[X]:
     # 1. 读取 CSV（日期列自动解析）
     df = await asyncio.to_thread(pd.read_csv, DATA_DIR)
 

@@ -1,8 +1,12 @@
+import logging
+
 import pytest
 from sqlalchemy import text
 
 from app.config.database import engine, create_tables, drop_tables
 from app.service.x_service import save_data
+
+logger = logging.getLogger(__name__)
 
 
 @pytest.mark.asyncio
@@ -12,8 +16,8 @@ async def test_connection():
             result = await conn.execute(text("SELECT version()"))
             version = result.fetchone()
             assert version is not None
-            print("✅ 数据库连接成功！")
-            print(f"PostgreSQL 版本: {version[0]}")
+            logger.debug("✅ 数据库连接成功！")
+            logger.debug(f"PostgreSQL 版本: {version[0]}")
     except Exception as e:
         raise e
 

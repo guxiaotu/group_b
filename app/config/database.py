@@ -44,13 +44,9 @@ async def get_session():
 async def create_tables():
     async with engine.begin() as conn:
         # run_sync 用来在异步连接上执行同步的metadata操作
-        await conn.run_sync(
-            lambda sync_conn: SQLModel.metadata.create_all(bind=sync_conn)
-        )
+        await conn.run_sync(SQLModel.metadata.create_all)
 
 
 async def drop_tables():
     async with engine.begin() as conn:
-        await conn.run_sync(
-            lambda sync_conn: SQLModel.metadata.drop_all(bind=sync_conn)
-        )
+        await conn.run_sync(SQLModel.metadata.drop_all)
