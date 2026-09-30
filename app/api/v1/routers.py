@@ -5,7 +5,7 @@ from fastapi import Depends
 from fastapi import Request, APIRouter
 from fastapi.responses import HTMLResponse
 from sqlmodel import Session
-from starlette.templating import Jinja2Templates, _TemplateResponse
+from starlette.templating import Jinja2Templates
 
 from app.config.database import get_session
 from app.view import x_view

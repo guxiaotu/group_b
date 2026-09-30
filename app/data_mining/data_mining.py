@@ -1,4 +1,3 @@
-from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -17,10 +16,15 @@ def read_data() -> list[X]:
     # 1. 读取 CSV（日期列自动解析）
     df = pd.read_csv(DATA_DIR)
 
+    # 转化标准日期格式
+    df["月份"] = pd.to_datetime(
+        df["月份"].astype(str) + "-01", format="%Y-%m-%d", errors="coerce"
+    ).dt.date
+
     # 2. CSV → SQLModel 列表
     return [
         X(
-            month=datetime.strptime(row["月份"], "%Y-%m").date(),
+            month=row["月份"],
             count=row["商品数量"],
             ratios=row["样本占比(%)"],
             sample_count=row["样本累计数量"],
