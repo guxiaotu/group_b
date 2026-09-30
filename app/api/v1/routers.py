@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Annotated
 
 from fastapi import Request, APIRouter, Depends
 from fastapi.responses import HTMLResponse
@@ -17,7 +18,7 @@ templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 
 @router.get("/x", response_class=HTMLResponse)
-async def x(request: Request, s: AsyncSession = Depends(get_session)):
+async def x(request: Request, s: Annotated[AsyncSession, Depends(get_session)]):
     x = await x_view.get_view(s)
     return templates.TemplateResponse(
         request=request, name="x.jinjia2", context={"x": x.model_dump()}
