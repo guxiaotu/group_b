@@ -1,20 +1,20 @@
-import os
-
-from dotenv import load_dotenv
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-# 加载 .env
-load_dotenv()
 
-# 只读取 DATABASE_URL
-DATABASE_URL = os.getenv("DATABASE_URL")
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env")
+    database_url: str
+
+
+settings = Settings()
 
 # mysql 异步协议：mysql+aiomysql://
 # postgresql 异步协议：postgresql+asyncpg:
 engine = create_async_engine(
-    url=str(DATABASE_URL),
+    url=settings.database_url,
     echo=True,  # 调试打印SQL语句
     pool_size=10,  # 连接池大小
     max_overflow=20,  # 连接词大池满后最多再创建20个连接池
