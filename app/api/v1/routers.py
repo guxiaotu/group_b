@@ -19,9 +19,9 @@ templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 @router.get("/x", response_class=HTMLResponse)
 async def x(request: Request, s: Annotated[AsyncSession, Depends(get_session)]):
-    x = await x_view.get_view(s)
+    x_ = await x_view.get_view(s)
     return templates.TemplateResponse(
-        request=request, name="x.jinjia2", context={"x": x.model_dump()}
+        request=request, name="x.jinjia2", context={"x": x_.model_dump()}
     )
 
 

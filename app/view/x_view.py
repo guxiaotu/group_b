@@ -1,3 +1,4 @@
+import logging
 from typing import Sequence
 
 from sqlmodel import select
@@ -6,18 +7,34 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.model.entity import X
 from app.model.view import XView
 
+logger = logging.getLogger(__name__)
+
 
 async def find_entity(s: AsyncSession) -> Sequence[X]:
     return (await s.exec(select(X))).all()
 
 
 async def get_view(s: AsyncSession) -> XView:
-    x_list = await find_entity(s)
+    x_list = await find_entity(s) or []
+
+    if not x_list:
+        logger.info("查询结果为空！")
+        return XView(month=[], count=[], ratios=[], sample_count=[])
+
+    months: list[str] = []
+    counts: list[int] = []
+    ratios: list[float] = []
+    sample_counts: list[int] = []
+
+    for x in x_list:
+        months.append(x.month.strftime("%Y-%m") if x.month else "")
+        counts.append(x.count)
+        ratios.append(x.ratios)
+        sample_counts.append(x.sample_count)
+
     return XView(
-        month=[
-            x.month.strftime("%Y-%m") for x in x_list
-        ],  # echarts渲染time类型会有问题，转化为字符串
-        count=[x.count for x in x_list],
-        ratios=[x.ratios for x in x_list],
-        sample_count=[x.sample_count for x in x_list],
+        month=months,
+        count=counts,
+        ratios=ratios,
+        sample_count=sample_counts,
     )
