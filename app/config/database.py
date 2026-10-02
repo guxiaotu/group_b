@@ -7,19 +7,18 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+    db_protocol: str
     db_user: str
     db_password: str
-    db_host: str = "localhost"
-    db_port: int = 3306
+    db_host: str
+    db_port: int
     db_name: str
-    db_charset: str = "utf8mb4"
 
     @property
     def database_url(self) -> str:
         return (
-            f"mysql+aiomysql://{self.db_user}:{self.db_password}"
+            f"{self.db_protocol}://{self.db_user}:{self.db_password}"
             f"@{self.db_host}:{self.db_port}/{self.db_name}"
-            f"?charset={self.db_charset}"
         )
 
 
